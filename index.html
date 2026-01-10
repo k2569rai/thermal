@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>Thermal Stack Calc - 1D Heat Transfer Simulator</title>
+    <meta name="description" content="Simple thermal resistance calculator for engineers. Calculate junction temperature with convection and heat spreading logic.">
+    <meta name="theme-color" content="#0d6efd">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="Thermal Stack Calc">
+    <meta property="og:description" content="スマホで計算！熱抵抗回路網シミュレーター。ヒートシンクやファンの効果をその場で検証。">
+    <meta property="og:site_name" content="Thermal Simulator">
+    <meta property="og:image" content="https://placehold.co/1200x630/0d6efd/ffffff?text=Thermal+Calc">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Thermal Stack Calc">
+    <meta property="twitter:description" content="Simple thermal resistance calculator for engineers.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        /* Mobile First Base Styles */
+        body {
+            background-color: #f4f7f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            padding-bottom: 40px;
+        }
+
+        /* Card Styling for Mobile */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 700;
+            color: #333;
+            padding: 15px;
+        }
+
+        /* Inputs: Touch Friendly (44px+ height) */
+        .form-control, .form-select, .btn {
+            min-height: 48px; /* Tappable area */
+            font-size: 16px; /* Prevent zoom on iOS */
+        }
+        .form-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        /* Layer List Item */
+        .layer-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #0d6efd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .btn-remove-layer {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            line-height: 30px;
+            border-radius: 50%;
+            background: #fff0f0;
+            color: #dc3545;
+            border: none;
+            font-weight: bold;
+        }
+
+        /* Result Area Highlight */
+        .result-highlight {
+            background-color: #eef5ff;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .result-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #0d6efd;
+        }
+        
+        /* Chart Container Responsiveness */
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        /* Mobile height */
+        @media (max-width: 767px) {
+            .chart-wrapper { height: 280px; }
+            h1 { font-size: 1.5rem; }
+        }
+        /* Desktop height */
+        @media (min-width: 768px) {
+            .chart-wrapper { height: 350px; }
+        }
+
+        /* Utility */
+        .text-xs { font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-primary mb-3 shadow-sm">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1 fw-bold">
+            <i class="bi bi-calculator"></i> Thermal Calc
+        </span>
+        <span class="badge bg-white text-primary">Ver 4.0</span>
+    </div>
+</nav>
+
+<div class="container-md"> <p class="text-muted small px-2 mb-3">
+        熱抵抗回路網によるジャンクション温度計算ツール。ヒートシンク表面積や対流熱伝達をスマホで素早く見積もれます。
+    </p>
+
+    <div class="row g-3">
+        <div class="col-lg-5 col-12 order-lg-1 order-1">
+            
+            <div class="card">
+                <div class="card-header"><i class="bi bi-cpu-fill text-primary"></i> 1. 熱源条件</div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label">発熱量 Q (W)</label>
+                            <input type="number" id="inp-Q" class="form-control" value="20" step="any" inputmode="decimal">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">外気温 Tamb (℃)</label>
+                            <input type="number" id="inp-Tamb" class="form-control" value="25" step="any" inputmode="decimal">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">チップ面積 ($mm^2$)</label>
+                            <input type="number" id="inp-Asource" class="form-control" value="100" inputmode="decimal">
+                            <div class="text-xs text-muted mt-1">※ チップ単体の断面積 (例: 10x10=100)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-layers-fill text-primary"></i> 2. 材料スタック</span>
+                    <button class="btn btn-sm btn-outline-primary" onclick="addLayer()">
+                        <i class="bi bi-plus-lg"></i> 追加
+                    </button>
+                </div>
+                <div class="card-body bg-light">
+                    <div id="layer-container"></div>
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 5px solid #ff9800;">
+                <div class="card-header bg-white text-dark">
+                    <i class="bi bi-wind text-warning"></i> 3. 放熱環境 (対流)
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">有効放熱表面積 ($mm^2$)</label>
+                        <div class="input-group">
+                            <input type="number" id="inp-Asurf" class="form-control fw-bold text-primary" value="5000" inputmode="decimal">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">目安</button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" onclick="setVal('inp-Asurf', 100)">放熱板なし (100)</a></li>
+                                <li><a class="dropdown-item" onclick="setVal('inp-Asurf', 5000)">標準HS (5,000)</a></li>
+                                <li><a class="dropdown-item" onclick="setVal('inp-Asurf', 20000)">大型HS (20,000)</a></li>
+                            </ul>
+                        </div>
+                        <div class="text-xs text-muted mt-1">※フィンを含めた総表面積が重要です</div>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label">h (W/m²K)</label>
+                            <input type="number" id="inp-h" class="form-control" value="10" inputmode="decimal">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">プリセット</label>
+                            <select class="form-select" onchange="setVal('inp-h', this.value)">
+                                <option value="5">自然対流 (5)</option>
+                                <option value="10" selected>煙突効果 (10)</option>
+                                <option value="50">ファン空冷 (50)</option>
+                                <option value="1000">水冷 (1000)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+                <button class="btn btn-primary btn-lg shadow fw-bold" onclick="calculate()">
+                    <i class="bi bi-play-circle-fill"></i> 計算実行
+                </button>
+            </div>
+        </div>
+
+        <div class="col-lg-7 col-12 order-lg-2 order-2">
+            
+            <div class="card" id="result-card" style="display:none;">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase small text-center mb-3">Simulation Result</h6>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="result-highlight">
+                                <div class="small text-muted mb-1">ジャンクション温度 Tj</div>
+                                <div class="result-val"><span id="res-Tj">--</span><span style="font-size:1.5rem">℃</span></div>
+                                <div class="badge bg-secondary mt-2">上昇幅: +<span id="res-dT">--</span>℃</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3 text-center border-top pt-3">
+                        <div class="col-6 border-end">
+                            <div class="small text-muted">総熱抵抗 Rth</div>
+                            <div class="fw-bold fs-5"><span id="res-Rtot">--</span> <small class="text-muted font-normal">K/W</small></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="small text-muted">ボトルネック</div>
+                            <div class="fw-bold fs-5 text-warning text-truncate" id="res-bottle">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header small">温度分布プロファイル</div>
+                <div class="card-body">
+                    <div class="chart-wrapper">
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header small">熱抵抗内訳 (ボトルネック)</div>
+                <div class="card-body d-flex justify-content-center">
+                    <div class="chart-wrapper" style="max-width: 400px; height: 250px;">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Constants & Init
+    const PRESETS = {
+        "custom": {k:1, l:"カスタム"},
+        "si": {k:148, l:"シリコン (Chip)"},
+        "grease": {k:3.0, l:"グリス (TIM)"},
+        "cu": {k:398, l:"銅 (Cu)"},
+        "al": {k:237, l:"アルミ (Al)"},
+        "pcb": {k:0.3, l:"基板 (FR4)"}
+    };
+    let chartT = null, chartP = null;
+
+    window.onload = () => {
+        // Init Layers
+        addLayer("Chip", 0.5, 148, 100);
+        addLayer("TIM", 0.1, 3.0, 100);
+        addLayer("Base", 3.0, 237, 900); // 30x30mm
+        calculate();
+    };
+
+    // UI Helpers
+    function setVal(id, val) { document.getElementById(id).value = val; }
+
+    function addLayer(n="", t="", k="", a="") {
+        const id = "L" + Math.floor(Math.random()*10000);
+        const defA = document.getElementById('inp-Asource').value;
+        
+        let opts = `<option value="">--素材--</option>`;
+        for(let key in PRESETS) if(key!=='custom') opts+=`<option value="${PRESETS[key].k}">${PRESETS[key].l}</option>`;
+
+        const html = `
+        <div class="layer-item" id="${id}">
+            <button class="btn-remove-layer" onclick="document.getElementById('${id}').remove()">×</button>
+            <div class="row g-2">
+                <div class="col-7">
+                    <label class="form-label text-xs">名前</label>
+                    <input type="text" class="form-control form-control-sm i-n" value="${n}">
+                </div>
+                <div class="col-5">
+                    <label class="form-label text-xs">プリセット</label>
+                    <select class="form-select form-select-sm" onchange="applyPre(this)">${opts}</select>
+                </div>
+                <div class="col-4">
+                    <label class="form-label text-xs text-primary fw-bold">断面積(mm²)</label>
+                    <input type="number" class="form-control form-control-sm i-a" value="${a||defA}" inputmode="decimal">
+                </div>
+                <div class="col-4">
+                    <label class="form-label text-xs">厚み(mm)</label>
+                    <input type="number" class="form-control form-control-sm i-t" value="${t}" step="any" inputmode="decimal">
+                </div>
+                <div class="col-4">
+                    <label class="form-label text-xs">k(W/mK)</label>
+                    <input type="number" class="form-control form-control-sm i-k" value="${k}" step="any" inputmode="decimal">
+                </div>
+            </div>
+        </div>`;
+        document.getElementById('layer-container').insertAdjacentHTML('beforeend', html);
+    }
+
+    function applyPre(el) {
+        if(!el.value) return;
+        const p = el.parentElement.parentElement;
+        p.querySelector('.i-k').value = el.value;
+        const nameInp = p.querySelector('.i-n');
+        const txt = el.options[el.selectedIndex].text.split(' (')[0];
+        if(!nameInp.value) nameInp.value = txt;
+    }
+
+    // Calculation Core
+    function calculate() {
+        // 1. Fetch Inputs
+        const get = id => parseFloat(document.getElementById(id).value);
+        const Q = get('inp-Q'), Tamb = get('inp-Tamb'), Asurf = get('inp-Asurf'), h = get('inp-h');
+
+        if([Q, Tamb, Asurf, h].some(isNaN) || Asurf<=0 || h<=0) {
+            alert("入力値を確認してください"); return;
+        }
+
+        // 2. Compute Layers
+        let layers = [], R_solid = 0, x = 0, T = 0;
+        document.querySelectorAll('.layer-item').forEach(el => {
+            const val = c => parseFloat(el.querySelector(c).value);
+            const t=val('.i-t'), k=val('.i-k'), A=val('.i-a'), n=el.querySelector('.i-n').value;
+            
+            if(!isNaN(t) && !isNaN(k) && !isNaN(A) && A>0) {
+                const R = (t/1000) / (k * (A/1e6));
+                layers.push({ n, x: x+=t, R, dT: Q*R, A });
+                R_solid += R;
+            }
+        });
+
+        // 3. Compute Convection
+        const R_conv = 1 / (h * (Asurf/1e6));
+        const dT_conv = Q * R_conv;
+        
+        // 4. Results
+        const R_tot = R_solid + R_conv;
+        const dT_tot = Q * R_tot;
+        const Tj = Tamb + dT_tot;
+
+        // Display
+        document.getElementById('result-card').style.display = 'block';
+        document.getElementById('res-Tj').innerText = Tj.toFixed(2);
+        document.getElementById('res-dT').innerText = dT_tot.toFixed(2);
+        document.getElementById('res-Rtot').innerText = R_tot.toFixed(2);
+
+        // Find Bottle Neck
+        let maxR = R_conv, bottleName = "対流 (空気)";
+        layers.forEach(l => { if(l.R > maxR){ maxR=l.R; bottleName=l.n; }});
+        document.getElementById('res-bottle').innerText = bottleName;
+
+        // 5. Draw Charts
+        drawCharts(Tj, layers, R_conv, dT_conv, Asurf);
+    }
+
+    function drawCharts(Tj, layers, R_conv, dT_conv, Asurf) {
+        // Line Chart Data
+        let curT = Tj, curX = 0;
+        const pts = [{x:0, y:curT, label:"Junction"}];
+        layers.forEach(l => {
+            curT -= l.dT;
+            pts.push({x: l.x.toFixed(2), y: parseFloat(curT.toFixed(2)), label: l.n});
+            curX = l.x;
+        });
+        // Add Air point
+        pts.push({x: (curX + 5).toFixed(2), y: (curT - dT_conv).toFixed(2), label: "Ambient"});
+
+        // Pie Data
+        const pLabs = [...layers.map(l=>l.n), "空気 (Convection)"];
+        const pDat = [...layers.map(l=>l.R), R_conv];
+        const colors = ['#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#fd7e14', '#ffc107', '#198754', '#20c997'];
+
+        // Render Temp Chart
+        if(chartT) chartT.destroy();
+        chartT = new Chart(document.getElementById('tempChart'), {
+            type: 'scatter',
+            data: { datasets: [{ 
+                label:'Temp Profile', data:pts, showLine:true, borderColor:'#dc3545', backgroundColor:'rgba(220,53,69,0.1)', tension:0 
+            }]},
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                scales:{ x:{title:{display:true, text:'Distance (mm)'}}, y:{title:{display:true, text:'Temp (℃)'}} },
+                plugins:{ tooltip:{callbacks:{label:c=>`${c.raw.label}: ${c.raw.y}℃`}} }
+            }
+        });
+
+        // Render Pie Chart
+        if(chartP) chartP.destroy();
+        chartP = new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
+            data: { labels: pLabs, datasets: [{ data: pDat, backgroundColor: colors }] },
+            options: {
+                responsive:true, maintainAspectRatio:false,
+                plugins: { legend:{position:'right', labels:{boxWidth:12, font:{size:10}}} }
+            }
+        });
+    }
+</script>
+</body>
+</html>
