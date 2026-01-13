@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Heat Transfer Lab v15.1</title>
+    <title>Heat Transfer Lab v16.1</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
     <style>
-        :root {
-            --primary-bg: #f4f6f8;
-        }
+        :root { --primary-bg: #f4f6f8; }
         body {
             background-color: var(--primary-bg);
             font-family: 'Segoe UI', sans-serif;
@@ -19,101 +17,64 @@
         
         /* Navigation Styles */
         .nav-pills .nav-link {
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-weight: bold;
-            color: #555;
-            background: #e9ecef;
-            margin-right: 10px;
-            margin-bottom: 10px;
+            border-radius: 50px; padding: 10px 20px; font-weight: bold;
+            color: #555; background: #e9ecef; margin-right: 10px; margin-bottom: 10px;
         }
         .nav-pills .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
+            background-color: #0d6efd; color: white;
             box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
         }
         .nav-pills .nav-link .bi { margin-right: 5px; }
 
         /* Card & Input Styles */
         .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            margin-bottom: 20px;
+            border: none; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 20px;
         }
         .card-header {
-            background: white;
-            font-weight: 700;
-            padding: 15px;
+            background: white; font-weight: 700; padding: 15px;
             border-bottom: 1px solid #eee;
         }
-        .form-control, .form-select, .btn {
-            min-height: 48px;
-            font-size: 16px;
-        }
+        .form-control, .form-select, .btn { min-height: 48px; font-size: 16px; }
         
-        /* Chart Containers */
-        .chart-wrapper {
-            position: relative;
-            height: 350px;
-            width: 100%;
-        }
+        /* Chart Wrapper */
+        .chart-wrapper { position: relative; height: 350px; width: 100%; }
         
         /* Tab 1: Layer Items */
         .layer-item {
-            background: white;
-            border: 1px solid #dee2e6;
-            border-left: 5px solid #ccc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            position: relative;
+            background: white; border: 1px solid #dee2e6; border-left: 5px solid #ccc;
+            padding: 15px; border-radius: 8px; margin-bottom: 10px; position: relative;
         }
         .mode-plane .layer-item { border-left-color: #3498db; }
         .mode-cyl .layer-item { border-left-color: #e67e22; }
 
         /* Tab 2: Sphere Animation */
         .anim-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 220px;
-            background: #212529;
-            border-radius: 12px;
-            color: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 250px; background: #212529; border-radius: 12px; color: white;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
         }
         .sim-sphere {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #ff0000;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3) inset, 0 10px 20px rgba(0,0,0,0.5);
+            width: 120px; height: 120px; border-radius: 50%; background-color: #ff0000;
+            box-shadow: inset -15px -15px 30px rgba(0,0,0,0.6), inset 10px 10px 30px rgba(255,255,255,0.4);
             transition: background-color 0.1s linear;
         }
 
         /* Tab 3: Fin Result Box */
-        .fin-result-box {
-            background: #e8f5e9;
-            border: 1px solid #c8e6c9;
-            border-radius: 8px;
-            padding: 15px;
+        .fin-result-box { background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; padding: 15px; }
+
+        /* Tab 4: Section Title */
+        .cv-section-title {
+            font-size: 0.9rem; font-weight: bold; color: #6c757d;
+            border-bottom: 2px solid #e9ecef; padding-bottom: 5px; margin-bottom: 15px; margin-top: 10px;
         }
 
         /* Tab 5: Diffusion Canvas */
         .canvas-container {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 10px;
-            margin-bottom: 20px;
+            background: white; border: 1px solid #ddd; border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 10px; margin-bottom: 20px;
         }
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+        canvas { width: 100%; height: 100%; display: block; }
 
         /* Utilities */
         .text-xs { font-size: 0.85rem; }
@@ -124,28 +85,18 @@
 
 <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
     <div class="container-fluid justify-content-center">
-        <span class="navbar-brand mb-0 h1 fw-bold"><i class="bi bi-mortarboard-fill"></i> Heat Transfer Lab v15.1</span>
+        <span class="navbar-brand mb-0 h1 fw-bold"><i class="bi bi-mortarboard-fill"></i> Heat Transfer Lab v16.1</span>
     </div>
 </nav>
 
 <div class="container-md">
     
     <ul class="nav nav-pills mb-4 justify-content-center" id="mainTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="steady-tab" data-bs-toggle="pill" data-bs-target="#steady" type="button" role="tab"><i class="bi bi-layers"></i> 多層熱伝導</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="transient-tab" data-bs-toggle="pill" data-bs-target="#transient" type="button" role="tab"><i class="bi bi-clock-history"></i> 非定常冷却</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="fin-tab" data-bs-toggle="pill" data-bs-target="#fin" type="button" role="tab"><i class="bi bi-grid-3x3"></i> フィン設計</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="flow-tab" data-bs-toggle="pill" data-bs-target="#flow" type="button" role="tab"><i class="bi bi-wind"></i> 強制対流</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="diffusion-tab" data-bs-toggle="pill" data-bs-target="#diffusion" type="button" role="tab"><i class="bi bi-fire"></i> 1D熱拡散</button>
-        </li>
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#steady"><i class="bi bi-layers"></i> 多層熱伝導</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#transient"><i class="bi bi-clock-history"></i> 非定常冷却</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#fin"><i class="bi bi-grid-3x3"></i> フィン設計</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#flow"><i class="bi bi-wind"></i> 強制対流</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#diffusion"><i class="bi bi-fire"></i> 1D熱拡散</button></li>
     </ul>
 
     <div class="tab-content" id="mainTabContent">
@@ -156,9 +107,9 @@
                     <div class="card bg-light">
                         <div class="card-body p-2 text-center">
                             <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="geomMode" id="mode-plane" autocomplete="off" checked onchange="ss_setMode('plane')">
+                                <input type="radio" class="btn-check" name="geomMode" id="mode-plane" checked onchange="ss_setMode('plane')">
                                 <label class="btn btn-outline-primary" for="mode-plane">平板 (Wall)</label>
-                                <input type="radio" class="btn-check" name="geomMode" id="mode-cyl" autocomplete="off" onchange="ss_setMode('cylinder')">
+                                <input type="radio" class="btn-check" name="geomMode" id="mode-cyl" onchange="ss_setMode('cylinder')">
                                 <label class="btn btn-outline-warning" for="mode-cyl">円筒 (Pipe)</label>
                             </div>
                         </div>
@@ -185,7 +136,7 @@
                                     <input type="number" id="ss-Tin" class="form-control" value="100">
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label text-xs fw-bold text-primary">外気温 Tout (℃)</label>
+                                    <label class="form-label text-xs fw-bold text-primary" id="lbl-tout">外気温 Tout (℃)</label>
                                     <input type="number" id="ss-Tout" class="form-control" value="20">
                                 </div>
                                 
@@ -226,7 +177,11 @@
 
                     <div class="card">
                         <div class="card-body py-2">
-                            <div class="row align-items-center">
+                            <div class="form-check form-switch mb-2 border-bottom pb-2">
+                                <input class="form-check-input" type="checkbox" id="ss-check-conv" checked onchange="ss_toggleConv()">
+                                <label class="form-check-label text-xs fw-bold" for="ss-check-conv">外気への熱伝達 (h) を考慮</label>
+                            </div>
+                            <div class="row align-items-center" id="ss-div-h">
                                 <div class="col-7"><label class="text-xs">外気熱伝達率 h</label></div>
                                 <div class="col-5"><input type="number" id="ss-h" class="form-control form-control-sm" value="10"></div>
                             </div>
@@ -277,18 +232,12 @@
                                 </select>
                             </div>
                             <div class="mb-2">
-                                <label class="text-xs text-muted">代表長さ/直径 (mm)</label>
+                                <label class="text-xs text-muted">代表長さ L (mm)</label>
                                 <input type="number" id="tr-dim" class="form-control" value="10">
                             </div>
                             <div class="row g-2 mb-2">
-                                <div class="col-6">
-                                    <label class="text-xs text-muted">初期 Ti (℃)</label>
-                                    <input type="number" id="tr-Ti" class="form-control" value="200">
-                                </div>
-                                <div class="col-6">
-                                    <label class="text-xs text-muted">流体 Tf (℃)</label>
-                                    <input type="number" id="tr-Tf" class="form-control" value="20">
-                                </div>
+                                <div class="col-6"><label class="text-xs text-muted">初期 Ti (℃)</label><input type="number" id="tr-Ti" class="form-control" value="200"></div>
+                                <div class="col-6"><label class="text-xs text-muted">流体 Tf (℃)</label><input type="number" id="tr-Tf" class="form-control" value="20"></div>
                             </div>
                             <hr class="my-2">
                             <div class="row g-2 mb-2">
@@ -304,13 +253,13 @@
                         </div>
                     </div>
                     <div class="card mt-3">
-                        <div class="card-header bg-dark text-white text-xs">シミュレーション</div>
+                        <div class="card-header bg-dark text-white text-xs py-1">Simulation View</div>
                         <div class="card-body p-0">
                             <div class="anim-container">
                                 <div class="sim-sphere" id="anim-sphere"></div>
-                                <div class="mt-3 font-monospace">
-                                    t = <span id="anim-time">0.0</span> s<br>
-                                    T = <span id="anim-temp">--</span> ℃
+                                <div class="mt-3 font-monospace text-center">
+                                    Time: <span id="anim-time" class="fw-bold text-warning">0.0</span> s<br>
+                                    Temp: <span id="anim-temp" class="fw-bold">--</span> ℃
                                 </div>
                             </div>
                         </div>
@@ -400,45 +349,65 @@
         <div class="tab-pane fade" id="flow" role="tabpanel">
             <div class="row g-3">
                 <div class="col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-header border-info">A. 円管内流れ (Gz数)</div>
+                    <div class="card h-100 border-info">
+                        <div class="card-header bg-info text-white">A. 円管内助走区間 (Graetz)</div>
                         <div class="card-body">
+                            <div class="cv-section-title">入力パラメータ</div>
                             <div class="row g-2 mb-3">
-                                <div class="col-6"><label class="text-xs fw-bold">D (mm)</label><input type="number" id="gz-D" class="form-control" value="10"></div>
-                                <div class="col-6"><label class="text-xs fw-bold">x (m)</label><input type="number" id="gz-x" class="form-control" value="0.5"></div>
-                                <div class="col-4"><label class="text-xs text-muted">Re</label><input type="number" id="gz-Re" class="form-control form-control-sm" value="200"></div>
-                                <div class="col-4"><label class="text-xs text-muted">Pr</label><input type="number" id="gz-Pr" class="form-control form-control-sm" value="7.1"></div>
-                                <div class="col-4"><label class="text-xs text-muted">k</label><input type="number" id="gz-k" class="form-control form-control-sm" value="0.6"></div>
+                                <div class="col-6"><label class="text-xs fw-bold">管直径 D (mm)</label><input type="number" id="gz-D" class="form-control" value="10"></div>
+                                <div class="col-6"><label class="text-xs fw-bold">熱伝導率 k</label><input type="number" id="gz-k" class="form-control" value="0.6"></div>
+                                <div class="col-6"><label class="text-xs text-muted">Re数</label><input type="number" id="gz-Re" class="form-control" value="1000"></div>
+                                <div class="col-6"><label class="text-xs text-muted">Pr数</label><input type="number" id="gz-Pr" class="form-control" value="7.0"></div>
                             </div>
-                            <button class="btn btn-info w-100 text-white fw-bold mb-3" onclick="calc_graetz()">計算</button>
-                            <div class="bg-light p-3 rounded mb-3">
-                                <div class="row text-center">
-                                    <div class="col-4 border-end"><div class="text-xs text-muted">Gz</div><div class="fw-bold" id="gz-res-Gz">--</div></div>
-                                    <div class="col-4 border-end"><div class="text-xs text-muted">Nu</div><div class="fw-bold text-primary" id="gz-res-Nu">--</div></div>
-                                    <div class="col-4"><div class="text-xs text-muted">h</div><div class="fw-bold text-success" id="gz-res-h">--</div></div>
-                                </div>
-                            </div>
+                            <button class="btn btn-outline-info w-100 fw-bold mb-3" onclick="cv_calc_graetz()">グラフ描画</button>
                             <div class="chart-wrapper" style="height: 250px;"><canvas id="gz-chart"></canvas></div>
+                            <div class="alert alert-info mt-3 py-2 text-xs" style="display:none" id="gz-comment">
+                                <i class="bi bi-lightbulb-fill"></i> <strong>Point:</strong> 温度境界層が未発達な入口付近（xが小さい領域）では、ヌッセルト数が高く、熱伝達効率が良いことがわかります。
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-header border-danger">B. 熱線流速計 (逆算)</div>
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">B. 熱線流速計 (Hot Wire)</div>
                         <div class="card-body">
-                            <div class="row g-2 mb-3">
-                                <div class="col-12"><label class="text-xs fw-bold">線径 d (µm)</label><input type="number" id="hw-d" class="form-control border-danger" value="5"></div>
-                                <div class="col-6"><label class="text-xs text-muted">Tw (℃)</label><input type="number" id="hw-Tw" class="form-control" value="80"></div>
-                                <div class="col-6"><label class="text-xs text-muted">Tf (℃)</label><input type="number" id="hw-Tf" class="form-control" value="20"></div>
-                                <div class="col-12"><label class="text-xs fw-bold">P (W/m)</label><input type="number" id="hw-P" class="form-control" value="0.5"></div>
-                                <div class="col-4"><label class="text-xs text-muted">ν</label><input type="text" id="hw-nu" class="form-control form-control-sm" value="1.5e-5"></div>
-                                <div class="col-4"><label class="text-xs text-muted">Pr</label><input type="number" id="hw-Pr" class="form-control form-control-sm" value="0.71"></div>
-                                <div class="col-4"><label class="text-xs text-muted">k</label><input type="number" id="hw-k" class="form-control form-control-sm" value="0.026"></div>
+                            <div class="btn-group w-100 mb-3" role="group">
+                                <input type="radio" class="btn-check" name="hwMode" id="hw-mode1" autocomplete="off" checked onchange="cv_update_hw_inputs()">
+                                <label class="btn btn-outline-danger" for="hw-mode1">実験 (Tw→u)</label>
+                                <input type="radio" class="btn-check" name="hwMode" id="hw-mode2" autocomplete="off" onchange="cv_update_hw_inputs()">
+                                <label class="btn btn-outline-danger" for="hw-mode2">予習 (u→Tw)</label>
                             </div>
-                            <button class="btn btn-danger w-100 fw-bold mb-3" onclick="calc_hotwire()">流速u 逆算</button>
-                            <div class="alert alert-danger text-center">
-                                <div class="small text-muted mb-1">推定流速 u</div>
-                                <div class="fs-2 fw-bold" id="hw-res-u">-- m/s</div>
+
+                            <div class="cv-section-title">条件設定</div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6"><label class="text-xs">線径 d (µm)</label><input type="number" id="hw-d" class="form-control" value="10"></div>
+                                <div class="col-6"><label class="text-xs">加熱量 P (W/m)</label><input type="number" id="hw-P" class="form-control" value="0.5"></div>
+                                
+                                <div class="col-12 hw-grp-mode1">
+                                    <label class="text-xs fw-bold text-danger">計測温度 Tw (℃)</label>
+                                    <input type="number" id="hw-Tw" class="form-control" value="80">
+                                </div>
+                                <div class="col-12 hw-grp-mode2 input-hidden">
+                                    <label class="text-xs fw-bold text-primary">想定流速 u (m/s)</label>
+                                    <input type="number" id="hw-u" class="form-control" value="5.0">
+                                </div>
+
+                                <div class="col-4"><label class="text-xs text-muted">流体Tf</label><input type="number" id="hw-Tf" class="form-control form-control-sm" value="20"></div>
+                                <div class="col-4"><label class="text-xs text-muted">Pr</label><input type="number" id="hw-Pr" class="form-control form-control-sm" value="0.7"></div>
+                                <div class="col-4"><label class="text-xs text-muted">動粘度ν</label><input type="text" id="hw-nu" class="form-control form-control-sm" value="1.5e-5"></div>
+                                <div class="col-4"><label class="text-xs text-muted">k</label><input type="number" id="hw-k" class="form-control form-control-sm" value="0.025"></div>
+                            </div>
+
+                            <button class="btn btn-danger w-100 fw-bold mb-3" onclick="cv_calc_hotwire()">計算実行</button>
+                            <div class="bg-light p-3 rounded text-center">
+                                <div class="text-muted text-xs mb-1" id="hw-res-lbl">計算結果</div>
+                                <div class="fs-1 fw-bold text-dark" id="hw-res-main">--</div>
+                                <hr class="my-2">
+                                <div class="row text-xs text-muted">
+                                    <div class="col-4">Nu = <span id="hw-res-Nu" class="fw-bold">--</span></div>
+                                    <div class="col-4">Re = <span id="hw-res-Re" class="fw-bold">--</span></div>
+                                    <div class="col-4">h = <span id="hw-res-h" class="fw-bold">--</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -450,15 +419,10 @@
             <div class="row g-3">
                 <div class="col-lg-8">
                     <div class="mb-2 fw-bold text-secondary"><i class="bi bi-palette"></i> 温度分布 (ヒートマップ)</div>
-                    <div class="canvas-container" style="height: 120px;">
-                        <canvas id="df-map"></canvas>
-                    </div>
+                    <div class="canvas-container" style="height: 120px;"><canvas id="df-map"></canvas></div>
                     <div class="mb-2 mt-3 fw-bold text-secondary"><i class="bi bi-graph-up"></i> 温度プロファイル (グラフ)</div>
-                    <div class="canvas-container" style="height: 300px;">
-                        <canvas id="df-graph"></canvas>
-                    </div>
+                    <div class="canvas-container" style="height: 300px;"><canvas id="df-graph"></canvas></div>
                 </div>
-
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-header"><i class="bi bi-sliders"></i> 設定 (差分法)</div>
@@ -467,18 +431,15 @@
                                 <button class="btn btn-primary" id="df-btn-toggle" onclick="df_toggleSim()"><i class="bi bi-play-fill"></i> スタート</button>
                                 <button class="btn btn-secondary" onclick="df_resetSim()"><i class="bi bi-arrow-counterclockwise"></i> リセット</button>
                             </div>
-
                             <div class="mb-3">
                                 <label class="form-label small fw-bold">左端温度 (熱源)</label>
                                 <input type="range" class="form-range" id="df-Tleft" min="0" max="300" value="100" oninput="df_updateLabel()">
                                 <div class="text-end text-danger fw-bold" id="df-lbl-Tleft">100 ℃</div>
                             </div>
-
                             <div class="mb-3">
                                 <label class="form-label small fw-bold">初期温度</label>
                                 <input type="number" class="form-control" id="df-Tinit" value="20" onchange="df_resetSim()">
                             </div>
-
                             <div class="mb-3">
                                 <label class="form-label small fw-bold">熱拡散率 α (素材)</label>
                                 <select class="form-select mb-1" id="df-mat" onchange="document.getElementById('df-alpha').value=this.value">
@@ -489,7 +450,6 @@
                                 </select>
                                 <input type="range" class="form-range" id="df-alpha" min="0.1" max="100" step="0.1" value="97">
                             </div>
-
                             <hr>
                             <div class="mb-2 text-center">
                                 <label class="small text-muted">経過時間</label>
@@ -519,12 +479,10 @@
     };
     
     // Chart Instances
-    let chartSS = null;
-    let chartTR = null;
-    let chartFIN = null;
-    let chartGZ = null;
+    let chartSS = null, chartTR = null, chartFIN = null, chartGZ = null;
+    const getVal = (id) => parseFloat(document.getElementById(id).value);
 
-    // --- TAB 1: STEADY STATE LOGIC ---
+    // --- TAB 1: STEADY STATE ---
     let ssMode = 'plane';
 
     function ss_setMode(m) {
@@ -547,6 +505,12 @@
     function ss_toggleFlux() {
         const on = document.getElementById('ss-check-flux').checked;
         document.getElementById('ss-div-flux').classList.toggle('input-hidden', !on);
+    }
+
+    function ss_toggleConv() {
+        const on = document.getElementById('ss-check-conv').checked;
+        document.getElementById('ss-div-h').classList.toggle('input-hidden', !on);
+        document.getElementById('lbl-tout').innerText = on ? "外気温 Tout (℃)" : "表面温度 Ts (℃)";
     }
 
     function ss_addLayer(n = "", d = "", k = "") {
@@ -577,10 +541,11 @@
 
     function ss_calc() {
         let R_sum = 0, layers = [], lastGeom = 0;
-        const get = id => parseFloat(document.getElementById(id).value);
+        const Tout = getVal('ss-Tout');
+        const useConv = document.getElementById('ss-check-conv').checked;
 
         if (ssMode === 'plane') {
-            const A = get('ss-A') / 1e6;
+            const A = getVal('ss-A') / 1e6;
             document.querySelectorAll('#ss-layers .layer-item').forEach(el => {
                 const d = parseFloat(el.querySelector('.i-d').value);
                 const k = parseFloat(el.querySelector('.i-k').value);
@@ -592,8 +557,8 @@
                 }
             });
         } else {
-            const L = get('ss-L');
-            let r_curr = get('ss-ID') / 2000;
+            const L = getVal('ss-L');
+            let r_curr = getVal('ss-ID') / 2000;
             document.querySelectorAll('#ss-layers .layer-item').forEach(el => {
                 const OD = parseFloat(el.querySelector('.i-d').value);
                 const k = parseFloat(el.querySelector('.i-k').value);
@@ -609,19 +574,23 @@
             lastGeom = r_curr;
         }
 
-        const h = get('ss-h');
+        // Convection (Conditional)
+        const h = getVal('ss-h');
         let Asurf = 0;
-        if (ssMode === 'plane') Asurf = get('ss-A') / 1e6;
-        else Asurf = 2 * Math.PI * lastGeom * get('ss-L');
-        const R_conv = 1 / (h * Asurf);
-        R_sum += R_conv;
+        if (ssMode === 'plane') Asurf = getVal('ss-A') / 1e6;
+        else Asurf = 2 * Math.PI * lastGeom * getVal('ss-L');
+        
+        let R_conv = 0;
+        if (useConv) {
+            R_conv = 1 / (h * Asurf);
+            R_sum += R_conv;
+        }
 
         // Flux Check
         const hasFlux = document.getElementById('ss-check-flux').checked;
-        if (hasFlux && ssMode === 'plane' && layers.length > 0) {
+        if (hasFlux && ssMode === 'plane' && layers.length > 0 && useConv) {
             const q_flux = parseFloat(document.getElementById('ss-flux').value);
-            const Tback = 20; // Assumption for asphalt exercise
-            const Tout = get('ss-Tout');
+            const Tback = 20;
             const R_cond = layers[0].R;
             const Ts = (q_flux + h * Tout + Tback / R_cond) / (h + 1 / R_cond);
             document.getElementById('ss-res').style.display = 'block';
@@ -631,14 +600,13 @@
         }
 
         const tgt = document.getElementById('ss-target').value;
-        const Tout = get('ss-Tout');
         let Q = 0, Tin = 0;
 
         if (tgt === 'Tin') {
-            Q = get('ss-Q');
+            Q = getVal('ss-Q');
             Tin = Tout + (Q * R_sum);
         } else {
-            Tin = get('ss-Tin');
+            Tin = getVal('ss-Tin');
             Q = (Tin - Tout) / R_sum;
         }
 
@@ -652,6 +620,7 @@
             document.getElementById('ss-res-val').innerText = Q.toFixed(1) + "W";
         }
 
+        // Draw Graph
         let pts = [{ x: 0, y: Tin, label: '内側' }], cx = 0, ct = Tin;
         layers.forEach(l => {
             l.dT = Q * l.R;
@@ -660,7 +629,14 @@
             else cx = l.r_out * 1000;
             pts.push({ x: cx, y: ct, label: l.n || 'Layer' });
         });
-        pts.push({ x: cx * 1.15, y: Tout, label: '外気' });
+        
+        if (useConv) {
+            // Add point for Fluid Temp
+            pts.push({ x: cx * 1.15, y: Tout, label: '外気' });
+        } else {
+            // If no convection, last point is Surface Temp
+            pts[pts.length - 1].label = '表面';
+        }
 
         const ctx = document.getElementById('ss-chart').getContext('2d');
         if (chartSS) chartSS.destroy();
@@ -671,20 +647,16 @@
         });
     }
 
-    // --- TAB 2: TRANSIENT LOGIC ---
-    let tr_params = {};
-    let tr_anim_id = null;
+    // --- TAB 2: TRANSIENT + ANIMATION ---
+    let tr_params = {}, tr_anim_id = null;
 
     function tr_calc() {
-        const get = id => parseFloat(document.getElementById(id).value);
-        const L_raw = get('tr-dim') / 1000;
+        const L_raw = getVal('tr-dim') / 1000;
         const shape = document.getElementById('tr-shape').value;
-        let Lc = 0;
-        if (shape === 'sphere' || shape === 'cube') Lc = L_raw / 6;
-        else Lc = L_raw / 2;
+        let Lc = (shape === 'plate') ? L_raw / 2 : L_raw / 6;
 
-        const k = get('tr-k'), h = get('tr-h'), rho = get('tr-rho'), cp = get('tr-cp');
-        const Ti = get('tr-Ti'), Tf = get('tr-Tf');
+        const k = getVal('tr-k'), h = getVal('tr-h'), rho = getVal('tr-rho'), cp = getVal('tr-cp');
+        const Ti = getVal('tr-Ti'), Tf = getVal('tr-Tf');
 
         const Bi = (h * Lc) / k;
         document.getElementById('tr-bi').innerText = Bi.toFixed(4);
@@ -705,7 +677,7 @@
             const T = Tf + (Ti - Tf) * Math.exp(-t / tau);
             pts.push({ x: t, y: T });
         }
-
+        
         tr_params = { Ti, Tf, tau, maxTime };
 
         const ctx = document.getElementById('tr-chart').getContext('2d');
@@ -715,16 +687,14 @@
             data: {
                 datasets: [
                     { label: 'T(t)', data: pts, showLine: true, borderColor: '#dc3545', pointRadius: 0 },
-                    { label: 'Cur', data: [], pointRadius: 6, pointBackgroundColor: 'orange' }
+                    { label: '現在', data: [], pointRadius: 8, pointBackgroundColor: 'orange' }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false }
         });
 
         if (tr_anim_id) cancelAnimationFrame(tr_anim_id);
-        tr_updateSphere(Ti, Ti, Tf);
-        document.getElementById('anim-time').innerText = "0.0";
-        document.getElementById('anim-temp').innerText = Ti.toFixed(1);
+        tr_update_visuals(0, Ti);
     }
 
     function tr_play_anim() {
@@ -733,174 +703,146 @@
 
         const start = performance.now();
         const duration = 5000; 
-        const simEnd = 600; 
 
         function loop(now) {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1.0);
-            const t = progress * simEnd;
+            const t = progress * tr_params.maxTime;
             const T = tr_params.Tf + (tr_params.Ti - tr_params.Tf) * Math.exp(-t / tr_params.tau);
 
-            document.getElementById('anim-time').innerText = t.toFixed(1);
-            document.getElementById('anim-temp').innerText = T.toFixed(1);
-            tr_updateSphere(T, tr_params.Ti, tr_params.Tf);
-
-            chartTR.data.datasets[1].data = [{ x: t, y: T }];
-            chartTR.update('none');
+            tr_update_visuals(t, T);
 
             if (progress < 1.0) tr_anim_id = requestAnimationFrame(loop);
         }
         tr_anim_id = requestAnimationFrame(loop);
     }
 
-    function tr_updateSphere(T, Ti, Tf) {
-        let r = (T - Tf) / (Ti - Tf);
-        if (r < 0) r = 0; if (r > 1) r = 1;
-        const hue = (1.0 - r) * 240; // 0=Red, 240=Blue
+    function tr_update_visuals(t, T) {
+        document.getElementById('anim-time').innerText = t.toFixed(1);
+        document.getElementById('anim-temp').innerText = T.toFixed(1);
+
+        let ratio = (T - tr_params.Tf) / (tr_params.Ti - tr_params.Tf);
+        if (ratio < 0) ratio = 0; if (ratio > 1) ratio = 1;
+        const hue = (1.0 - ratio) * 240;
         document.getElementById('anim-sphere').style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+
+        if (chartTR) {
+            chartTR.data.datasets[1].data = [{ x: t, y: T }];
+            chartTR.update('none');
+        }
     }
 
-    // --- TAB 3: FIN DESIGN LOGIC ---
+    // --- TAB 3: FIN ---
     function fin_calc_core() {
-        const get = id => parseFloat(document.getElementById(id).value);
-        const D = get('fin-D') / 1000;
-        const L = get('fin-L') / 1000;
-        const k = get('fin-k'), h = get('fin-h');
-        const Tb = get('fin-Tb'), Tf = get('fin-Tf');
+        const D = getVal('fin-D') / 1000, L = getVal('fin-L') / 1000;
+        const k = getVal('fin-k'), h = getVal('fin-h');
+        const Tb = getVal('fin-Tb'), Tf = getVal('fin-Tf');
         const shape = document.getElementById('fin-shape').value;
-
         let P = 0, Ac = 0;
         if (shape === 'pin') { P = Math.PI * D; Ac = Math.PI * D * D / 4; }
         else { P = 4 * D; Ac = D * D; }
-
         const m = Math.sqrt((h * P) / (k * Ac));
         const eff = Math.tanh(m * L) / (m * L);
         const theta_b = Tb - Tf;
         const Q_fin = Math.sqrt(h * P * k * Ac) * theta_b * Math.tanh(m * L);
-
         return { m, eff, Q_fin, theta_b, h, P, k, Ac, L_curr: L };
     }
-
     function fin_calc() {
         const res = fin_calc_core();
         document.getElementById('fin-m').innerText = res.m.toFixed(1);
         document.getElementById('fin-eff').innerText = (res.eff * 100).toFixed(1) + "%";
         document.getElementById('fin-q').innerText = res.Q_fin.toFixed(2) + " W";
-
-        let pts = [];
-        const maxL = res.L_curr * 3;
+        let pts = []; const maxL = res.L_curr * 3;
         for (let i = 1; i <= 50; i++) {
             const l = (maxL * i) / 50;
             const q = Math.sqrt(res.h * res.P * res.k * res.Ac) * res.theta_b * Math.tanh(res.m * l);
             pts.push({ x: l * 1000, y: q });
         }
-
-        const ctx = document.getElementById('fin-chart').getContext('2d');
         if (chartFIN) chartFIN.destroy();
-        chartFIN = new Chart(ctx, {
-            type: 'scatter',
-            data: { datasets: [{ label: 'Q vs L', data: pts, showLine: true, borderColor: '#198754', pointRadius: 0 }] },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { x: { title: { display: true, text: 'L (mm)' } }, y: { title: { display: true, text: 'Q (W)' } } }
-            }
+        chartFIN = new Chart(document.getElementById('fin-chart'), {
+            type: 'scatter', data: { datasets: [{ label: 'Q vs L', data: pts, showLine: true, borderColor: '#198754', pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false }
         });
     }
-
     function fin_solve_length() {
         const Q_total = parseFloat(document.getElementById('fin-Qcpu').value);
         const N = parseFloat(document.getElementById('fin-N').value);
         const Q_target = Q_total / N;
         const res = fin_calc_core();
         const M = Math.sqrt(res.h * res.P * res.k * res.Ac) * res.theta_b;
-
-        if (Q_target >= M) {
-            document.getElementById('fin-req-L').innerText = "不可能 (理論限界超え)";
-            return;
-        }
+        if (Q_target >= M) { document.getElementById('fin-req-L').innerText = "不可能 (理論限界超え)"; return; }
         const mL = Math.atanh(Q_target / M);
         const L_req = mL / res.m;
         document.getElementById('fin-req-L').innerText = "必要長さ: " + (L_req * 1000).toFixed(1) + " mm";
     }
 
-    // --- TAB 4: CONVECTION LOGIC ---
-    function calc_graetz() {
-        const get = id => parseFloat(document.getElementById(id).value);
-        const D = get('gz-D') / 1000;
-        const x_target = get('gz-x');
-        const Re = get('gz-Re'), Pr = get('gz-Pr'), k = get('gz-k');
-
-        const Gz = (Re * Pr * D) / x_target;
-        const Nu = 1.08 * Math.pow(Gz, 1 / 3);
-        const h = (Nu * k) / D;
-
-        document.getElementById('gz-res-Gz').innerText = Gz.toFixed(1);
-        document.getElementById('gz-res-Nu').innerText = Nu.toFixed(2);
-        document.getElementById('gz-res-h').innerText = h.toFixed(1);
-
+    // --- TAB 4: CONVECTION ---
+    function cv_calc_graetz() {
+        const D = getVal('gz-D'), Re = getVal('gz-Re'), Pr = getVal('gz-Pr');
         let pts = [];
-        for (let i = 1; i <= 20; i++) {
-            let xx = 0.05 * i;
-            let gz = (Re * Pr * D) / xx;
-            pts.push({ x: xx, y: 1.08 * Math.pow(gz, 1 / 3) });
+        for(let x = 0.01; x <= 1.0; x += 0.01) {
+            const Gz = (Re * Pr * (D/1000)) / x;
+            const Nu = 1.08 * Math.pow(Gz, 1/3);
+            pts.push({x: x, y: Nu});
         }
-
-        const ctx = document.getElementById('gz-chart').getContext('2d');
-        if (chartGZ) chartGZ.destroy();
-        chartGZ = new Chart(ctx, {
-            type: 'scatter',
-            data: {
-                datasets: [
-                    { label: 'Nu vs x', data: pts, showLine: true, borderColor: '#0dcaf0', pointRadius: 0 },
-                    { label: 'Target', data: [{ x: x_target, y: Nu }], pointRadius: 6, backgroundColor: 'red' }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
+        if(chartGZ) chartGZ.destroy();
+        chartGZ = new Chart(document.getElementById('gz-chart'), {
+            type: 'scatter', data: { datasets: [{label: 'Nu vs x', data: pts, showLine: true, borderColor: '#0dcaf0', pointRadius: 0}] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { title: {display: true, text: 'Pipe Length x (m)'} }, y: { title: {display: true, text: 'Nusselt Nu'} } } }
         });
+        document.getElementById('gz-comment').style.display = 'block';
     }
 
-    function calc_hotwire() {
-        const get = id => parseFloat(document.getElementById(id).value);
-        const d = get('hw-d') * 1e-6;
-        const Tw = get('hw-Tw'), Tf = get('hw-Tf');
-        const P = get('hw-P');
-        const nu = parseFloat(document.getElementById('hw-nu').value);
-        const Pr = get('hw-Pr'), k = get('hw-k');
-
-        const h = P / (Math.PI * d * (Tw - Tf));
-        const Nu = (h * d) / k;
-        const Re = Math.pow(Nu / (0.8 * Math.pow(Pr, 0.5)), 2);
-        const u = (Re * nu) / d;
-
-        document.getElementById('hw-res-u').innerText = u.toFixed(2) + " m/s";
+    function cv_update_hw_inputs() {
+        const isMode1 = document.getElementById('hw-mode1').checked;
+        const show = (sel, v) => document.querySelector(sel).classList.toggle('input-hidden', !v);
+        show('.hw-grp-mode1', isMode1); show('.hw-grp-mode2', !isMode1);
+        document.getElementById('hw-res-lbl').innerText = isMode1 ? "推定流速 u" : "予測温度 Tw";
     }
 
-    // --- TAB 5: 1D DIFFUSION (FIXED) ---
-    // Variables for diffusion simulation
-    const df_N = 100;
-    const df_L = 0.5;
-    let df_dx = df_L / (df_N - 1);
-    let df_dt = 0.001;
-    let df_T = new Float32Array(df_N);
-    let df_Tn = new Float32Array(df_N);
-    let df_time = 0;
-    let df_running = false;
-    let df_anim_id;
+    function cv_calc_hotwire() {
+        const d = getVal('hw-d') * 1e-6, P_unit = getVal('hw-P'), Tf = getVal('hw-Tf'), Pr = getVal('hw-Pr');
+        const nu = parseFloat(document.getElementById('hw-nu').value), k = getVal('hw-k');
+        const isMode1 = document.getElementById('hw-mode1').checked;
+        let u_res = 0, Tw_res = 0, Nu_res = 0, Re_res = 0, h_res = 0;
 
-    // Elements
-    const cvMap = document.getElementById('df-map');
-    const ctxMap = cvMap.getContext('2d');
-    const cvGraph = document.getElementById('df-graph');
-    const ctxGraph = cvGraph.getContext('2d');
+        if(isMode1) {
+            const Tw = getVal('hw-Tw');
+            h_res = P_unit / (Math.PI * d * (Tw - Tf));
+            Nu_res = (h_res * d) / k;
+            const sqrtRe = Nu_res / (0.8 * Math.pow(Pr, 0.5));
+            Re_res = sqrtRe * sqrtRe;
+            u_res = (Re_res * nu) / d;
+            document.getElementById('hw-res-main').innerText = u_res.toFixed(2) + " m/s";
+        } else {
+            const u = getVal('hw-u');
+            Re_res = (u * d) / nu;
+            Nu_res = 0.80 * Math.pow(Re_res, 0.5) * Math.pow(Pr, 0.5);
+            h_res = (Nu_res * k) / d;
+            Tw_res = Tf + P_unit / (h_res * Math.PI * d);
+            document.getElementById('hw-res-main').innerText = Tw_res.toFixed(1) + " ℃";
+        }
+        document.getElementById('hw-res-Nu').innerText = Nu_res.toFixed(2);
+        document.getElementById('hw-res-Re').innerText = Re_res.toFixed(1);
+        document.getElementById('hw-res-h').innerText = h_res.toFixed(0);
+    }
 
-    // Resize Function (The fix for blank canvas)
+    // --- TAB 5: DIFFUSION ---
+    const df_N = 100, df_L = 0.5;
+    let df_dx = df_L / (df_N - 1), df_dt = 0.001;
+    let df_T = new Float32Array(df_N), df_Tn = new Float32Array(df_N);
+    let df_time = 0, df_running = false, df_anim_id;
+    const cvMap = document.getElementById('df-map'), ctxMap = cvMap.getContext('2d');
+    const cvGraph = document.getElementById('df-graph'), ctxGraph = cvGraph.getContext('2d');
+
     function df_resize() {
-        // Force width/height based on container
-        if (cvMap.offsetWidth > 0) {
-            cvMap.width = cvMap.offsetWidth;
-            cvMap.height = cvMap.offsetHeight;
-            cvGraph.width = cvGraph.offsetWidth;
-            cvGraph.height = cvGraph.offsetHeight;
+        // Robust resize logic
+        const containerMap = cvMap.parentElement;
+        const containerGraph = cvGraph.parentElement;
+        if (containerMap.offsetWidth > 0) {
+            cvMap.width = containerMap.offsetWidth;
+            cvMap.height = containerMap.offsetHeight;
+            cvGraph.width = containerGraph.offsetWidth;
+            cvGraph.height = containerGraph.offsetHeight;
             df_draw();
         }
     }
@@ -909,15 +851,12 @@
         df_running = false;
         document.getElementById('df-btn-toggle').innerHTML = '<i class="bi bi-play-fill"></i> スタート';
         document.getElementById('df-btn-toggle').className = 'btn btn-primary';
-        
         const Ti = parseFloat(document.getElementById('df-Tinit').value);
         const Tl = parseFloat(document.getElementById('df-Tleft').value);
-        
         for (let i = 0; i < df_N; i++) df_T[i] = Ti;
         df_T[0] = Tl;
         df_time = 0;
         document.getElementById('df-time').innerText = "0.00";
-        
         cancelAnimationFrame(df_anim_id);
         df_draw();
     }
@@ -943,50 +882,37 @@
 
     function df_loop() {
         if (!df_running) return;
-
         const alphaScale = parseFloat(document.getElementById('df-alpha').value);
         const alpha = alphaScale * 1e-4; 
-        
-        // Stability check
         const max_dt = 0.5 * df_dx * df_dx / alpha;
         df_dt = max_dt * 0.9;
         const Fo = (alpha * df_dt) / (df_dx * df_dx);
         const Tleft = parseFloat(document.getElementById('df-Tleft').value);
 
-        // Steps per frame
         for (let k = 0; k < 20; k++) {
             df_T[0] = Tleft;
             for (let i = 1; i < df_N - 1; i++) {
                 df_Tn[i] = df_T[i] + Fo * (df_T[i + 1] - 2 * df_T[i] + df_T[i - 1]);
             }
-            df_Tn[df_N - 1] = df_Tn[df_N - 2]; // Adiabatic
-            
+            df_Tn[df_N - 1] = df_Tn[df_N - 2];
             for (let i = 1; i < df_N; i++) df_T[i] = df_Tn[i];
             df_time += df_dt;
         }
-
         document.getElementById('df-time').innerText = df_time.toFixed(2);
         df_draw();
         df_anim_id = requestAnimationFrame(df_loop);
     }
 
     function df_draw() {
-        const w = cvMap.width;
-        const hm = cvMap.height;
-        const hg = cvGraph.height;
-        
-        // Safety check if canvas is 0 size
+        const w = cvMap.width, hm = cvMap.height, hg = cvGraph.height;
         if (w === 0) return;
-
         ctxMap.clearRect(0, 0, w, hm);
         ctxGraph.clearRect(0, 0, w, hg);
-
         const cw = w / df_N;
         const maxT = parseFloat(document.getElementById('df-Tleft').value) + 20;
         const minT = parseFloat(document.getElementById('df-Tinit').value) - 10;
         const range = maxT - minT;
 
-        // Draw Map
         for (let i = 0; i < df_N; i++) {
             let ratio = (df_T[i] - minT) / range;
             if (ratio < 0) ratio = 0; if (ratio > 1) ratio = 1;
@@ -995,17 +921,9 @@
             ctxMap.fillRect(i * cw, 0, cw + 1, hm);
         }
 
-        // Draw Graph
-        ctxGraph.beginPath();
-        ctxGraph.strokeStyle = "#aaa";
-        ctxGraph.lineWidth = 1;
-        ctxGraph.moveTo(0, hg); ctxGraph.lineTo(w, hg);
-        ctxGraph.moveTo(0, 0); ctxGraph.lineTo(0, hg);
-        ctxGraph.stroke();
-
-        ctxGraph.beginPath();
-        ctxGraph.strokeStyle = "#dc3545";
-        ctxGraph.lineWidth = 3;
+        ctxGraph.beginPath(); ctxGraph.strokeStyle = "#aaa"; ctxGraph.lineWidth = 1;
+        ctxGraph.moveTo(0, hg); ctxGraph.lineTo(w, hg); ctxGraph.moveTo(0, 0); ctxGraph.lineTo(0, hg); ctxGraph.stroke();
+        ctxGraph.beginPath(); ctxGraph.strokeStyle = "#dc3545"; ctxGraph.lineWidth = 3;
         for (let i = 0; i < df_N; i++) {
             const x = i * cw;
             const y = hg - ((df_T[i] - minT) / range) * hg;
@@ -1014,23 +932,16 @@
         ctxGraph.stroke();
     }
 
-    // --- INITIALIZATION ---
     window.onload = () => {
-        // Tab 1 Init
         ss_setMode('plane');
         ss_addLayer('壁', 20, 1.0);
-
-        // Tab 5 Init
-        df_resize();
-        df_resetSim();
-        
-        // Listeners for resizing Canvas when tab shows
-        const tabEl = document.getElementById('diffusion-tab');
-        tabEl.addEventListener('shown.bs.tab', function (event) {
-            df_resize();
-            df_draw();
+        df_resize(); df_resetSim();
+        const tabEls = document.querySelectorAll('button[data-bs-toggle="pill"]');
+        tabEls.forEach(el => {
+            el.addEventListener('shown.bs.tab', function (event) {
+                df_resize(); df_draw();
+            });
         });
-        
         window.addEventListener('resize', df_resize);
     };
 </script>
